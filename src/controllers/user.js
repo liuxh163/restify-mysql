@@ -34,7 +34,6 @@ exports.createUser = function(req,res,next){
 	}).then(user => {
 		redis.set(req.body.fname,req.body.lname,(e,ret) => {
 			if(e) throw e;
-			redis.expire(req.body.fname,2*60);
 		});
 		res.send('create user ok');
 		next();

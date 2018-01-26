@@ -50,6 +50,7 @@ var config = {
   // token加密密钥，生产环境务必修改
   token: {
     secret: 'i_am_the_first_api_server_by_liuxh_in_2018_01_22',
+    expire: 2*60,
     schema: '525fang'
   },
 

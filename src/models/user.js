@@ -48,12 +48,6 @@ module.exports = function(sequelize,DataTypes){
     // 创建表，force: true will drop the table if it already exists User.sync({force: false}).then(() => {
     User.sync().then(() => {
       console.log('user table has created!');
-      // Table created and insert one user
-      // return User.create({
-      //   firstname: 'liu',
-      //   lastname: 'xh',
-      //   active: false
-      // });
     });
 
     return User;

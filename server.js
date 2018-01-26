@@ -4,7 +4,8 @@
 const path = require('path'),
   restify = require('restify'),
   db = require('./src/models/'),
-  config   = require('./config');
+  config   = require('./config'),
+  loginCtl = require('./src/controllers/login');
 
 const serverConfig = {
   name: require(path.join(__dirname, 'package')).name,
@@ -12,11 +13,16 @@ const serverConfig = {
 };
 
 const server = restify.createServer(serverConfig);
+server.pre((req,res,next) => {
+  console.log('req: %s', req.href());
+  next();
+});
 
 server.use(restify.plugins.queryParser());
 // server.use(restify.plugins.jsonp());
 server.use(restify.plugins.bodyParser());
 server.use(restify.plugins.acceptParser(server.acceptable));
+server.use(loginCtl.verifyAll);
 
 require('./src/routes')(server);
 
