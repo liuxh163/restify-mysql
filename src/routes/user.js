@@ -8,4 +8,4 @@ module.exports = function(server){
   server.get({path: PATH, version: '1.0.1'}, userCtl.getAll);
   server.get({path: PATH + '/:name', version: ['1.0.1','1.0.2']}, userCtl.getByName);
   server.post({path: '/addUser'}, userCtl.createUser);
-}
+};

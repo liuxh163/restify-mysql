@@ -32,10 +32,7 @@ exports.createUser = function(req,res,next){
 		lastname: req.body.lname,
 		active: false
 	}).then(user => {
-		redis.set(req.body.fname,req.body.lname,(e,ret) => {
-			if(e) throw e;
-		});
-		res.send('create user ok');
+		res.json({code:200, data:{'user': user}, msg:'create user success'});
 		next();
 	});
 };

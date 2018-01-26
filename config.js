@@ -79,17 +79,6 @@ var config = {
     ignoreTLS: true,
   },
 
-  // 7牛的access信息，用于文件上传
-  qn_access: {
-    accessKey: 'your access key',
-    secretKey: 'your secret key',
-    bucket: 'your bucket name',
-    origin: 'http://your qiniu domain',
-    // 如果vps在国外，请使用 http://up.qiniug.com/ ，这是七牛的国际节点
-    // 如果在国内，此项请留空
-    uploadURL: 'http://xxxxxxxx',
-  },
-
   // 文件上传配置
   // 注：如果填写 qn_access，则会上传到 7牛，以下配置无效
   upload: {
