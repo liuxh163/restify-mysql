@@ -13,10 +13,10 @@ const serverConfig = {
 };
 
 const server = restify.createServer(serverConfig);
-server.pre((req,res,next) => {
-  console.log('req: %s', req.href());
-  next();
-});
+// server.pre((req,res,next) => {
+//   console.log('req: %s', req.href());
+//   next();
+// });
 
 server.use(restify.plugins.queryParser());
 // server.use(restify.plugins.jsonp());

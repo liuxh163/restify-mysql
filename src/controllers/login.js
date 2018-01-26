@@ -10,24 +10,26 @@ exports.login = function(req,res,next){
 	let userName = req.body.fname;
 	let password = req.body.lname;
 	if(!userName){
-		res.json({code:6002, data:{}, msg:'userName is null!'});
+		return res.json({code:6002, data:{}, msg:'userName is null!'});
 	};
 	if(!password){
-		res.json({code:6002, data:{}, msg:'password is null!'});
+		return res.json({code:6002, data:{}, msg:'password is null!'});
 	};
 	User.findOne({
 		where: {firstname: userName}
 	}).then(user => {
 		if(user.lastname == password){
 			// 登录成功，生成token，写入redis
-			let token = jwt.sign({'userId':user.id, 'expireIn': config.token.expire}, config.token.secret);
-			redis.set(user.id,token, (err, ret) => {
+			// let token = jwt.sign({'userId':user.id}, config.token.secret,{expiresIn: config.token.expire});
+			let token = jwt.sign({'userId':user.id}, config.token.secret);
+			let redisKey = token.split('.')[2];
+			redis.set(redisKey, user.id, (err, ret) => {
 				if(err) throw err;
-				redis.expire(user.id,config.token.expire);
+				redis.expire(redisKey,config.token.expire);
 			});
-			res.json({code:200, data:{'user': user,'token':token}, msg:'login success'});
+			return res.json({code:200, data:{'user': user,'token':token}, msg:'login success'});
 		}else{
-			res.json({code:6003, data:{}, msg:'password is incorrect!'});
+			return res.json({code:6003, data:{}, msg:'password is incorrect!'});
 		};
 	});
 };
@@ -45,27 +47,28 @@ function checkToken(req, res, next){
 	// 获取 token
 	let token = req.headers['x-authenticate-token'];
 	if(!token){
-		res.json({code:6001, data:{}, msg:'authenticate failure!'});
+		return res.json({code:6001, data:{}, msg:'authenticate failure!'});
 	};
 	// 验证token
 	jwt.verify(token, config.token.secret, (err, decode) =>{
 		if(err){
-			res.json({code:401, data:{}, msg:'token verify error'});
+			return res.json({code:401, data:{}, msg:'token is invalid'});
 		};
 		// 验证token通过
-		let expireIn = decode.expireIn;// 单位：秒，token有效时间
+		let expireIn = config.token.expire;// 单位：秒，token有效时间
+		let redisKey = token.split('.')[2];
 		let userId = decode.userId;
 
-		redis.exists(userId, (err, ret) => {
+		redis.exists(redisKey, (err, ret) => {
 			if(err) throw err;
 
 			if(ret){
 				// token有效，充值过期时间
-				redis.expire(userId, expireIn);
+				redis.expire(redisKey, expireIn);
 				next();
 			}else{
 				// token无效
-				res.json({code:401, data:{}, msg:'invalid token'});
+				return res.json({code:401, data:{}, msg:'token is expired'});
 			};
 		});
 	});
