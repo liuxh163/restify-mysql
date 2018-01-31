@@ -12,10 +12,6 @@ module.exports = function(sequelize,DataTypes){
             type: DataTypes.STRING(32),
             field: "user_id",
             comment: "三方用户ID",
-            references: {
-              model: 'User',
-              key: 'id'
-            },
             allowNull: true, //可空
         },
         nickName: {
