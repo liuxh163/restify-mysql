@@ -5,3 +5,4 @@ let DataTypes = require('../libs/mysql').Sequelize;
 
 // 加载所有数据模型
 exports.User = require('./user')(mysql,DataTypes);
+exports.TrdUser = require('./trdUser')(mysql,DataTypes);

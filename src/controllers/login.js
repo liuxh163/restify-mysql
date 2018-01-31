@@ -35,7 +35,7 @@ exports.login = function(req,res,next){
 };
 
 exports.verifyAll = function(req,res,next){
-	if('/login' == req.href()){
+	if('/login' == req.href() || '/addUser' == req.href()){
 	  console.log('login request : %s', req.href());
 	  next();
 	}else{
