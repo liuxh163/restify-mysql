@@ -9,7 +9,7 @@ module.exports = function(sequelize,DataTypes){
             primaryKey: true //主键
         },
         userId: {
-            type: DataTypes..STRING(32),
+            type: DataTypes.STRING(32),
             field: "user_id",
             comment: "三方用户ID",
             references: {
